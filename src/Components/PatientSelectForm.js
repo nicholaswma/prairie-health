@@ -9,12 +9,11 @@ import {
   Input,
 } from "@mui/material";
 
-function PatientSelectForm() {
+function PatientSelectForm({ setSelected, selected }) {
   const [patients, setPatients] = useState([]);
-  const [name, setName] = useState("");
 
   const handleChange = (e) => {
-    setName(e.target.value);
+    setSelected(e.target.value);
   };
   useEffect(() => {
     let names = [];
@@ -26,16 +25,19 @@ function PatientSelectForm() {
       });
     };
     sorter();
-    console.log(names);
     setPatients(names);
   }, []);
   return (
     <div>
       <FormControl fullWidth>
-        <InputLabel>Name</InputLabel>
-        <Select value={name} label="Name" onChange={handleChange}>
-          {patients.map((patient) => {
-            return <MenuItem value={patient}>{patient}</MenuItem>;
+        <InputLabel>Patient</InputLabel>
+        <Select value={selected} label="Name" onChange={handleChange}>
+          {patients.map((patient, id) => {
+            return (
+              <MenuItem value={patient} key={id}>
+                {patient}
+              </MenuItem>
+            );
           })}
         </Select>
       </FormControl>

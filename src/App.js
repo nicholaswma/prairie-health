@@ -50,6 +50,7 @@ function App() {
       ) : (
         <>
           <Box
+            color="white"
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -59,7 +60,21 @@ function App() {
             padding={0}
             height="7em"
           >
-            <img src={AnalyzerLogo} alt="logo" width="50%" height="auto" />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+              padding="2em"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Typography fontSize={"1.5rem"} fontWeight={700}>
+                Analyzer
+              </Typography>
+              <Typography fontSize={"1.125rem"}>Monitor your health</Typography>
+            </Box>
+            {/* <img src={AnalyzerLogo} alt="logo" width="50%" height="auto" /> */}
           </Box>
           <Box padding={"2em"} backgroundColor="#DBCCBA">
             <PatientSelectForm selected={selected} setSelected={setSelected} />
@@ -70,14 +85,29 @@ function App() {
         {matches ? (
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column",
               backgroundColor: "#DBCCBA",
             }}
+            color="white"
             height="100vh"
+            padding={"2em"}
           >
             <img src={AnalyzerLogo} alt="logo" height="25%" />
-            <Box padding={"2em"}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+              paddingBottom="2em"
+              justifyContent={"center"}
+              alignItems="center"
+            >
+              <Typography fontSize={"1.5rem"} fontWeight={700}>
+                Analyzer
+              </Typography>
+              <Typography fontSize={"1.125rem"}>Monitor your health</Typography>
+            </Box>
+
+            <Box>
               <PatientSelectForm
                 selected={selected}
                 setSelected={setSelected}

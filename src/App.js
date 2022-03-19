@@ -2,12 +2,9 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import data from "./Data/score-visualizer.json";
-import dummy from "./Data/dummy.json";
-import Header from "./Components/Header.js";
 import PatientSelectForm from "./Components/PatientSelectForm.js";
 import MyResponsiveChart from "./Components/MyResponsiveChart.js";
 import AnalyzerLogo from "./Assets/Analyzer.png";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -26,12 +23,16 @@ function App() {
         return individual["Patient Name"] === selected;
       });
       individualData.forEach((ele) => {
-        let timeStamp = ele["Timestamp"].split(" ")[0];
-        gad7.push({ x: ele["Timestamp"], y: ele["GAD-7 Score"] });
+        let timeStamp = !matches
+          ? ele["Timestamp"].split(" ")[0]
+          : ele["Timestamp"];
+        gad7.push({ x: timeStamp, y: ele["GAD-7 Score"] });
       });
       individualData.forEach((ele) => {
-        let timeStamp = ele["Timestamp"].split(" ")[0];
-        gad10.push({ x: ele["Timestamp"], y: ele["PHQ-9 Score"] });
+        let timeStamp = !matches
+          ? ele["Timestamp"].split(" ")[0]
+          : ele["Timestamp"];
+        gad10.push({ x: timeStamp, y: ele["PHQ-9 Score"] });
       });
       returnData = [
         { id: "GAD-7 Score", color: "hsl(56, 70%, 50%)", data: gad7 },
@@ -43,55 +44,84 @@ function App() {
   }, [selected]);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#DBCCBA",
-        }}
-        height="100vh"
-      >
-        <img src={AnalyzerLogo} alt="logo" height="25%" />
-        <Box padding={"2em"}>
-          <PatientSelectForm selected={selected} setSelected={setSelected} />
-        </Box>
-        <Box padding={"2em"} alignContent="center" justifyContent="center">
-          <SettingsIcon onClick={() => console.log("open modal")} />
-        </Box>
-      </Box>
-      {selected ? (
-        <Box width="100%" height="100vh">
-          <Typography
-            fontSize={"2rem"}
-            fontWeight={800}
-            paddingBottom="0"
+    <>
+      {matches ? (
+        <></>
+      ) : (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#DBCCBA",
+            }}
+            alignItems={"center"}
+            padding={0}
+            height="7em"
+          >
+            <img src={AnalyzerLogo} alt="logo" width="50%" height="auto" />
+          </Box>
+          <Box padding={"2em"} backgroundColor="#DBCCBA">
+            <PatientSelectForm selected={selected} setSelected={setSelected} />
+          </Box>
+        </>
+      )}
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        {matches ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#DBCCBA",
+            }}
+            height="100vh"
+          >
+            <img src={AnalyzerLogo} alt="logo" height="25%" />
+            <Box padding={"2em"}>
+              <PatientSelectForm
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Box>
+          </Box>
+        ) : (
+          <></>
+        )}
+        {selected ? (
+          <Box
+            width="100%"
+            height={matches ? "auto" : "100vh"}
+            marginTop="2.5em"
+          >
+            <Typography
+              fontSize={"2rem"}
+              fontWeight={800}
+              paddingBottom="0"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {selected}
+            </Typography>
+            <MyResponsiveChart data={displayData} />
+          </Box>
+        ) : (
+          <Box
+            width="100%"
+            height={!matches ? "100%" : "100vh"}
             sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            {selected}
-          </Typography>
-          <MyResponsiveChart data={displayData} />
-        </Box>
-      ) : (
-        <Box
-          width="100%"
-          height="100vh"
-          sx={{
-            bgcolor: "#D3D3D3",
-            opacity: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography>Please Select a Patient</Typography>
-        </Box>
-      )}
-    </Box>
+            <Typography>Please Select a Patient</Typography>
+          </Box>
+        )}
+      </Box>
+    </>
   );
 }
 
